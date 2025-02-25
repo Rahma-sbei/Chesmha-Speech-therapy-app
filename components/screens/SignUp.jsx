@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 
 const SignUp = ({ navigation }) => {
-  const url = "http://192.168.1.16:4000/api/users";
+  const url = "http://192.168.48.225:4000/api/users";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -41,7 +41,7 @@ const SignUp = ({ navigation }) => {
           navigation.navigate("Onboard");
         })
         .catch((error) => {
-          console.error("There was an error!", error);
+          console.log("There was an error!", error);
         });
     }
   };

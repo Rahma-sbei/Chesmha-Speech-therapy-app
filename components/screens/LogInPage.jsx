@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 
 const LoginPage = ({ navigation }) => {
-  const url = "http://192.168.1.16:4000/api/signIn";
+  const url = "http://192.168.48.225:4000/api/signIn";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,12 +34,6 @@ const LoginPage = ({ navigation }) => {
     } else {
       const user = { email: email, password: password };
 
-      // Alert.alert("Oops", password, [
-      //   {
-      //     text: "Ok",
-      //     style: "cancel",
-      //   },
-      // ]);
       axios
         .post(url, user)
         .then((response) => {
@@ -49,7 +43,6 @@ const LoginPage = ({ navigation }) => {
         })
         .catch((error) => {
           console.error("There was an error!", error);
-
           setError(true);
         });
     }

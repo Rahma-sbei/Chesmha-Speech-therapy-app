@@ -52,9 +52,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   nameText: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#000",
+    fontSize: 35,
+    fontWeight: "700",
+    color: "#8359E3",
+    fontFamily: "monospace",
+    letterSpacing: 1,
   },
   image: {
     width: 200,

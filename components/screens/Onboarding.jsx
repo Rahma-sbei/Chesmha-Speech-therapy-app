@@ -38,7 +38,7 @@ const OnboardingScreen = ({ navigation }) => {
     if (currentIndex < onboardingData.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      navigation.navigate("WelcomePage");
+      navigation.navigate("TabBar");
     }
   };
 
@@ -109,7 +109,7 @@ const OnboardingScreen = ({ navigation }) => {
               {currentIndex === onboardingData.length - 1 ? "Finish" : "Next"}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleNext}>
+          <TouchableOpacity>
             <Text
               style={{
                 color: "#aaa",

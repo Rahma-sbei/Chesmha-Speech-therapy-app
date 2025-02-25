@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 const Typing = () => {
   return (
@@ -13,7 +14,7 @@ const Typing = () => {
 
       {/* Top Translation Box */}
       <View
-        style={[styles.translationBox, styles.selectedBox, { marginTop: 30 }]}
+        style={[styles.translationBox, styles.selectedBox, { marginTop: 20 }]}
       >
         <Text style={styles.languageLabel}>English</Text>
         <Text style={styles.translationText}>
@@ -49,7 +50,7 @@ const Typing = () => {
         {/* Swap Button Positioned on Top */}
         <View style={styles.swapButtonContainer}>
           <TouchableOpacity style={styles.swapButton}>
-            <FontAwesome name="exchange" size={20} color="white" />
+            <FontAwesome6 name="arrows-rotate" size={24} color="white" />
           </TouchableOpacity>
         </View>
 
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 30,
     position: "absolute",
-    bottom: 80,
+    bottom: 40,
     left: 20,
     right: 20,
   },

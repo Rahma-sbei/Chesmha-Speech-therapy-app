@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 const Audio = () => {
   return (
@@ -11,26 +12,26 @@ const Audio = () => {
         <FontAwesome name="bars" size={20} color="black" />
       </View>
 
-      {/* Top Translation Box */}
       <View
         style={{
+          height: 100,
           alignItems: "center",
-          justifyContent: "flex-start",
-          paddingTop: 0,
+          marginBottom: 40,
+          marginTop: 20,
         }}
       >
         <Image
           source={require("../../assets/Screenshot_2025-02-24_225728-removebg-preview.png")}
           style={{
-            width: 340,
-            height: 250,
+            width: 320,
+            height: 110,
             marginLeft: 10,
+            paddingTop: 0,
           }}
           resizeMode="contain"
         />
       </View>
 
-      {/* Bottom Translation Box */}
       <View
         style={[
           styles.translationBox,
@@ -57,7 +58,7 @@ const Audio = () => {
         {/* Swap Button Positioned on Top */}
         <View style={styles.swapButtonContainer}>
           <TouchableOpacity style={styles.swapButton}>
-            <FontAwesome name="exchange" size={20} color="white" />
+            <FontAwesome6 name="arrows-rotate" size={24} color="white" />
           </TouchableOpacity>
         </View>
 
