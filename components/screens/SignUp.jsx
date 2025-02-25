@@ -9,15 +9,18 @@ import {
   Alert,
   Pressable,
 } from "react-native";
+import axios from "axios";
 
 const SignUp = ({ navigation }) => {
+  const url = "http://192.168.1.16:4000/api/users";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [confpass, setconfpass] = useState("");
   const [error, setError] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = (e) => {
     if (!email || !password || !username) {
       Alert.alert("Oops", "Please fill out all fields", [
         {
@@ -28,11 +31,18 @@ const SignUp = ({ navigation }) => {
     } else if (password !== confpass) {
       setError(true);
     } else {
-      setEmail("");
-      setUsername("");
-      setPassword("");
-      setconfpass("");
-      setError(false);
+      e.preventDefault();
+
+      const newUser = { userName: username, email: email, password: password };
+      axios
+        .post(url, newUser)
+        .then((response) => {
+          console.log(response.data);
+          navigation.navigate("Onboard");
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
     }
   };
   return (

@@ -9,11 +9,19 @@ import {
   Alert,
   Pressable,
 } from "react-native";
+import axios from "axios";
 
 const LoginPage = ({ navigation }) => {
+  const url = "http://192.168.1.16:4000/api/signIn";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(false);
+
+  const handlePasswordChange = (text) => {
+    setPassword(text);
+    setError(false);
+  };
 
   const handleLogin = () => {
     if (!email || !password) {
@@ -23,6 +31,27 @@ const LoginPage = ({ navigation }) => {
           style: "cancel",
         },
       ]);
+    } else {
+      const user = { email: email, password: password };
+
+      // Alert.alert("Oops", password, [
+      //   {
+      //     text: "Ok",
+      //     style: "cancel",
+      //   },
+      // ]);
+      axios
+        .post(url, user)
+        .then((response) => {
+          const token = response.data.token;
+          navigation.navigate("Onboard");
+          // localStorage.setItem("token", token);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+
+          setError(true);
+        });
     }
   };
   return (
@@ -49,11 +78,32 @@ const LoginPage = ({ navigation }) => {
         />
         <TextInput
           value={password}
-          onChangeText={setPassword}
+          onChangeText={handlePasswordChange}
           placeholder="Password"
           secureTextEntry
-          style={styles.input}
+          style={[
+            styles.input,
+            error
+              ? {
+                  marginBottom: 0,
+                  borderWidth: 2,
+                  borderColor: "rgb(225, 3, 3)",
+                }
+              : {},
+          ]}
         />
+        {error && (
+          <Text
+            style={{
+              fontsize: 10,
+              color: "rgb(225, 3, 3)",
+              marginLeft: 10,
+              marginBottom: 10,
+            }}
+          >
+            Wrong password. Try again or reset your password
+          </Text>
+        )}
 
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.loginButtonText}>Login</Text>
