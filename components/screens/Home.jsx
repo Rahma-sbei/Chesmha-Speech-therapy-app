@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,7 +9,8 @@ import {
   StyleSheet,
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { jwtDecode } from "jwt-decode";
+
 const categories = [
   {
     id: "1",
@@ -50,6 +51,36 @@ const categories = [
 ];
 
 const HomeScreen = () => {
+  const [user, setUser] = useState("");
+  const [userId, setuserId] = useState("");
+
+  useEffect(() => {
+    const token = AsyncStorage.getItem("token");
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setUserId(decodedToken.id);
+      } catch (error) {
+        console.error("Token decoding error:", error);
+      }
+    }
+    if (userId) {
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      axios
+        .get(`${url}/${userId}`, { headers })
+        .then((res) => {
+          setcurrentUser(res.data.user);
+          console.log("this is the username", currentUser.userName);
+        })
+        .catch((error) => {
+          console.error(error.response.data.msg);
+        });
+    }
+  }, [userId]);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
