@@ -10,7 +10,8 @@ import {
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { jwtDecode } from "jwt-decode";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 const categories = [
   {
     id: "1",
@@ -51,34 +52,44 @@ const categories = [
 ];
 
 const HomeScreen = () => {
-  const [user, setUser] = useState("");
-  const [userId, setuserId] = useState("");
+  const [user, setUser] = useState({});
+  const [userId, setuserId] = useState({});
+  const url = "http://192.168.1.16:4000/api/users";
 
   useEffect(() => {
-    const token = AsyncStorage.getItem("token");
+    AsyncStorage.getItem("token")
+      .then((token) => {
+        if (token) {
+          try {
+            const decodedToken = jwtDecode(token);
+            setuserId(decodedToken.id);
+            return token;
+          } catch (error) {
+            console.error("Token decoding error:", error);
+          }
+        }
+        return null;
+      })
+      .then((token) => {
+        if (userId && token) {
+          const headers = {
+            Authorization: `Bearer ${token}`,
+          };
 
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
-        setUserId(decodedToken.id);
-      } catch (error) {
-        console.error("Token decoding error:", error);
-      }
-    }
-    if (userId) {
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-      axios
-        .get(`${url}/${userId}`, { headers })
-        .then((res) => {
-          setcurrentUser(res.data.user);
-          console.log("this is the username", currentUser.userName);
-        })
-        .catch((error) => {
-          console.error(error.response.data.msg);
-        });
-    }
+          axios
+            .get(`${url}/${userId}`, { headers })
+            .then((res) => {
+              setUser(res.data.user);
+              console.log("This is the username:", user.userName);
+            })
+            .catch((error) => {
+              console.error(error.response?.data?.msg);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error("Error retrieving token:", error);
+      });
   }, [userId]);
 
   return (
@@ -86,7 +97,7 @@ const HomeScreen = () => {
       <View style={styles.header}>
         <View>
           <Text style={styles.greeting}>Hello!</Text>
-          <Text style={styles.username}>Serena Harrison</Text>
+          <Text style={styles.username}>{user.userName}</Text>
         </View>
         <TouchableOpacity>
           <FontAwesome name="bell" size={24} color="black" />
@@ -94,7 +105,6 @@ const HomeScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Search Bar */}
       <TextInput
         style={styles.searchBar}
         placeholder="Search"
@@ -114,8 +124,8 @@ const HomeScreen = () => {
       <FlatList
         data={categories}
         numColumns={3}
-        columnWrapperStyle={{ justifyContent: "space-between", gap: 10 }} // Space between columns
-        ItemSeparatorComponent={() => <View style={{ height: 20 }} />} // Vertical spacing
+        columnWrapperStyle={{ justifyContent: "space-between", gap: 10 }}
+        ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={{

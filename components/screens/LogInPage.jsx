@@ -13,7 +13,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginPage = ({ navigation }) => {
-  const url = "http://192.168.49.35:4000/api/signIn";
+  const url = "http://192.168.1.16:4000/api/signIn";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,8 +39,8 @@ const LoginPage = ({ navigation }) => {
         .post(url, user)
         .then((response) => {
           const token = response.data.token;
-          navigation.navigate("Onboard");
           AsyncStorage.setItem("token", token);
+          navigation.navigate("Onboard");
         })
         .catch((error) => {
           console.log("There was an error!", error);

@@ -4,7 +4,7 @@ import HomeScreen from "../screens/Home";
 import Typing from "../screens/Typing";
 import Audio from "../screens/Audio";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import CaptureScreen from "../screens/Capture";
+import Capture from "../screens/Capture";
 
 const Tab = createBottomTabNavigator();
 
@@ -67,7 +67,7 @@ export default function TabBar() {
           headerShown: false,
         }}
         name="Capture"
-        component={CaptureScreen}
+        component={Capture}
       />
     </Tab.Navigator>
   );

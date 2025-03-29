@@ -1,5 +1,9 @@
 {
   "expo": {
+    "extra": {
+      "supportsRTL": true,
+      "forcesRTL": true
+    },
     "name": "Chesmha",
     "slug": "Chesmha",
     "version": "1.0.0",

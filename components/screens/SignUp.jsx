@@ -12,13 +12,18 @@ import {
 import axios from "axios";
 
 const SignUp = ({ navigation }) => {
-  const url = "http://192.168.48.225:4000/api/users";
+  const url = "http://192.168.1.16:4000/api/users";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [confpass, setconfpass] = useState("");
   const [error, setError] = useState(false);
+
+  const handlePasswordChange = (text) => {
+    setconfpass(text);
+    setError(false);
+  };
 
   const handleLogin = (e) => {
     if (!email || !password || !username) {
@@ -38,7 +43,7 @@ const SignUp = ({ navigation }) => {
         .post(url, newUser)
         .then((response) => {
           console.log(response.data);
-          navigation.navigate("Onboard");
+          navigation.navigate("LoginPage");
         })
         .catch((error) => {
           console.log("There was an error!", error);
@@ -70,7 +75,7 @@ const SignUp = ({ navigation }) => {
         />
         <TextInput
           value={confpass}
-          onChangeText={setconfpass}
+          onChangeText={handlePasswordChange}
           placeholder=" Confirm Password"
           secureTextEntry
           style={[
