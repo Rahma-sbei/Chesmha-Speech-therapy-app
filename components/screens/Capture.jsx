@@ -12,8 +12,6 @@ import {
 } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import axios from "axios";
-import arabic_reshaper from "arabic-reshaper";
-import bidi from "bidi"; // Using the bidi package
 
 export default function Capture() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -47,14 +45,39 @@ export default function Capture() {
 
   const translateText = async (text) => {
     try {
-      const response = await axios.post("http://192.168.1.15:8000/translate/", {
-        text: text,
-      });
+      const dbResponse = await axios.post(
+        "http://192.168.1.15:4000/api/translation",
+        {
+          name: text,
+        }
+      );
 
-      console.log("Translated Text:", response.data.translated_text);
-      return response.data.translated_text;
-    } catch (error) {
-      console.error("Error translating text:", error);
+      if (dbResponse.data && dbResponse.data.translation) {
+        console.log(
+          "Translation found in database:",
+          dbResponse.data.translation
+        );
+        return dbResponse.data.translation;
+      }
+    } catch (dbError) {
+      console.error("Error fetching translation from database:", dbError);
+    }
+
+    try {
+      const apiResponse = await axios.post(
+        "http://192.168.1.15:8000/translate/",
+        {
+          text: text,
+        }
+      );
+
+      console.log(
+        "Translated Text from external API:",
+        apiResponse.data.translated_text
+      );
+      return apiResponse.data.translated_text;
+    } catch (apiError) {
+      console.error("Error translating text using external API:", apiError);
       return null;
     }
   };
@@ -133,9 +156,7 @@ export default function Capture() {
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               {detectedText ? (
-                <Text style={styles.modalText}>
-                  {bidi(arabic_reshaper.reshape(detectedText))}
-                </Text>
+                <Text style={styles.modalText}>{detectedText}</Text>
               ) : (
                 <Text style={styles.modalText}>Loading...</Text>
               )}
@@ -225,8 +246,9 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontSize: 18,
-    textAlign: "right",
-    writingDirection: "rtl",
+    textAlign: "right", // Force RTL alignment
+    writingDirection: "rtl", // Ensures correct text flow
+    direction: "rtl", // Extra safety for rendering
     fontFamily: "Tajawal",
   },
 });

@@ -1,8 +1,12 @@
 const express = require("express");
-const transRoute = express.Router();
+const translationRoute = express.Router();
 
-const { translate } = require("../controllers/translationController");
+const {
+  postObject,
+  getTranslation,
+} = require("../controllers/translationController");
 
-transRoute.post("/translation", translate);
+translationRoute.post("/translation", postObject);
+translationRoute.post("/gettranslation", getTranslation);
 
-module.exports = transRoute;
+module.exports = translationRoute;

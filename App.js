@@ -7,14 +7,17 @@ import LoginPage from "./components/screens/LogInPage";
 import SignUp from "./components/screens/SignUp";
 import OnboardingScreen from "./components/screens/Onboarding";
 import TabBar from "./components/navs/TabBar";
-import Camera from "./components/screens/Capture";
 import Capture from "./components/screens/Capture";
+import Typing from "./components/screens/Typing";
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
-    <Capture />
+    <NavigationContainer>
+      <TabBar />
+    </NavigationContainer>
+
     // <NavigationContainer>
     //   <Stack.Navigator
     //     initialRouteName="WelcomePage"

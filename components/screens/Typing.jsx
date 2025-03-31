@@ -1,57 +1,130 @@
-import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+  Pressable,
+} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import axios from "axios";
 
 const Typing = () => {
+  const [text, setText] = useState("");
+  const [translation, setTranslation] = useState("");
+  const [debouncedText, setDebouncedText] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedText(text);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [text]);
+
+  useEffect(() => {
+    if (debouncedText.trim() !== "") {
+      translateText(debouncedText);
+    } else {
+      setTranslation("");
+    }
+  }, [debouncedText]);
+
+  const translateText = async (text) => {
+    try {
+      const dbResponse = await axios.post(
+        "http://192.168.1.15:4000/api/gettranslation",
+        {
+          name: text,
+        }
+      );
+      console.log(text);
+      console.log(dbResponse.data);
+
+      if (dbResponse.data && dbResponse.data.translation) {
+        console.log(
+          "Translation found in database:",
+          dbResponse.data.translation
+        );
+        setTranslation(dbResponse.data.translation);
+
+        return;
+      }
+    } catch (dbError) {
+      console.error("Error fetching translation from database:", dbError);
+    }
+
+    // try {
+    //   const response = await axios.post("http://192.168.1.15:8000/translate/", {
+    //     text: text,
+    //   });
+
+    //   console.log(
+    //     "Translated Text from external API:",
+    //     response.data.translated_text
+    //   );
+    //   setTranslation(response.data.translated_text);
+
+    //   return;
+    // } catch (apiError) {
+    //   console.error("Error translating text using external API:", apiError);
+    //   return null;
+    // }
+  };
+
+  const clearText = () => {
+    setText("");
+    setTranslation("");
+  };
+
   return (
     <View style={styles.container}>
-      {/* Back & Menu Icons */}
-      <View style={styles.header}>
-        <FontAwesome name="arrow-left" size={20} color="black" />
-        <FontAwesome name="bars" size={20} color="black" />
-      </View>
-
-      {/* Top Translation Box */}
-      <View
-        style={[styles.translationBox, styles.selectedBox, { marginTop: 20 }]}
-      >
+      <View style={styles.translationBox}>
         <Text style={styles.languageLabel}>English</Text>
-        <Text style={styles.translationText}>
-          Serangan terhadap warga Asia New York baru-baru ini menyebabkan empat
-          kematian. Yao Pan Ma, seorang imigran Cina
-        </Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter text to translate..."
+          value={text}
+          onChangeText={(inputText) => {
+            setText(inputText);
+          }}
+          multiline={true}
+          numberOfLines={5}
+          textAlignVertical="top"
+        />
       </View>
 
-      {/* Bottom Translation Box */}
       <View
         style={[
           styles.translationBox,
-          { backgroundColor: "#A7ADF9", borderColor: "#aaa", borderWidth: 1 },
+          {
+            backgroundColor: "#A7ADF9",
+            borderColor: "#aaa",
+            borderWidth: 1,
+            height: 150,
+          },
         ]}
       >
         <Text style={styles.languageLabel}>Tunisia</Text>
         <Text style={styles.translationText}>
-          Serangan terhadap warga Asia New York baru-baru ini menyebabkan empat
-          kematian. Yao Pan Ma, seorang imigran Cina
+          {translation || "Translation will appear here..."}
         </Text>
         <View style={styles.iconRow}>
-          <FontAwesome name="copy" size={16} color="gray" />
           <FontAwesome name="volume-up" size={16} color="gray" />
         </View>
       </View>
 
-      {/* Bottom Language Switch Bar */}
       <View style={styles.bottomBar}>
         <TouchableOpacity style={styles.languageButton}>
           <Text style={styles.buttonText}>English</Text>
         </TouchableOpacity>
 
-        {/* Swap Button Positioned on Top */}
         <View style={styles.swapButtonContainer}>
-          <TouchableOpacity style={styles.swapButton}>
-            <FontAwesome6 name="arrows-rotate" size={24} color="white" />
-          </TouchableOpacity>
+          <Pressable style={styles.swapButton} onPress={clearText}>
+            <FontAwesome6 name="xmark" size={40} color="white" />
+          </Pressable>
         </View>
 
         <TouchableOpacity style={styles.languageButton}>
@@ -65,7 +138,6 @@ const Typing = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "white", padding: 20, marginTop: 30 },
 
-  // Header icons
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -78,16 +150,24 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
-  selectedBox: { borderWidth: 2, borderColor: "#7E57C2" },
   languageLabel: { fontSize: 14, fontWeight: "bold", marginBottom: 5 },
   translationText: {
     fontSize: 17,
     color: "white",
     fontWeight: 500,
     lineHeight: 35,
+    textAlign: "right",
+    writingDirection: "rtl",
+    direction: "rtl",
   },
   iconRow: { flexDirection: "row", gap: 15, marginTop: 10 },
-
+  input: {
+    color: "rgb(92, 91, 93)",
+    fontSize: 16,
+    height: 100,
+    lineHeight: 35,
+    fontWeight: 500,
+  },
   // Bottom Bar
   bottomBar: {
     flexDirection: "row",
@@ -99,7 +179,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 30,
     position: "absolute",
-    bottom: 40,
+    bottom: 50,
     left: 20,
     right: 20,
   },

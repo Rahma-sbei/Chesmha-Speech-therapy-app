@@ -3,6 +3,7 @@ const app = express();
 const connectDb = require("./configuration/connectDb");
 const cors = require("cors");
 const userRoute = require("./routes/userRoute");
+const translationRoute = require("./routes/transRoute");
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -22,3 +23,4 @@ app.listen(port, (error) => {
 
 app.use(express.json());
 app.use("/api", userRoute);
+app.use("/api", translationRoute);

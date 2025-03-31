@@ -39,6 +39,7 @@ export default function TabBar() {
         tabBarLabelStyle: {
           fontSize: 13, // Set your desired font size
         },
+        tabBarHideOnKeyboard: true,
       })}
     >
       <Tab.Screen
