@@ -19,7 +19,7 @@ const Typing = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedText(text);
-    }, 100);
+    }, 200);
 
     return () => clearTimeout(timer);
   }, [text]);
@@ -33,45 +33,40 @@ const Typing = () => {
   }, [debouncedText]);
 
   const translateText = async (text) => {
+    const dbtext = text.toLowerCase();
     try {
       const dbResponse = await axios.post(
         "http://192.168.1.15:4000/api/gettranslation",
         {
-          name: text,
+          name: dbtext,
         }
       );
-      console.log(text);
-      console.log(dbResponse.data);
 
       if (dbResponse.data && dbResponse.data.translation) {
         console.log(
           "Translation found in database:",
           dbResponse.data.translation
         );
-        setTranslation(dbResponse.data.translation);
-
-        return;
+        return setTranslation(dbResponse.data.translation);
       }
     } catch (dbError) {
       console.error("Error fetching translation from database:", dbError);
     }
 
-    // try {
-    //   const response = await axios.post("http://192.168.1.15:8000/translate/", {
-    //     text: text,
-    //   });
+    try {
+      const response = await axios.post("http://192.168.1.15:8000/translate/", {
+        text: text,
+      });
 
-    //   console.log(
-    //     "Translated Text from external API:",
-    //     response.data.translated_text
-    //   );
-    //   setTranslation(response.data.translated_text);
-
-    //   return;
-    // } catch (apiError) {
-    //   console.error("Error translating text using external API:", apiError);
-    //   return null;
-    // }
+      console.log(
+        "Translated Text from external API:",
+        response.data.translated_text
+      );
+      return setTranslation(response.data.translated_text);
+    } catch (apiError) {
+      console.error("Error translating text using external API:", apiError);
+      return null;
+    }
   };
 
   const clearText = () => {
