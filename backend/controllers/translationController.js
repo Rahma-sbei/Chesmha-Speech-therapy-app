@@ -4,7 +4,6 @@ const Object = require("../models/Object");
 const getTranslation = async (request, response) => {
   const object = request.body;
   try {
-    console.log(object.name);
     const foundObject = await Object.findOne({ name: object.name });
     if (foundObject) {
       response

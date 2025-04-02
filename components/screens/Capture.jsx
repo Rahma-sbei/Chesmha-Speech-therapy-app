@@ -44,19 +44,16 @@ export default function Capture() {
   const apiSecret = "c70372d760e515c7ff3e083af7a6e62d";
 
   const translateText = async (text) => {
+    const dbtext = text.toLowerCase();
     try {
       const dbResponse = await axios.post(
-        "http://192.168.1.15:4000/api/translation",
+        "http://192.168.1.15:4000/api/gettranslation",
         {
-          name: text,
+          name: dbtext,
         }
       );
 
       if (dbResponse.data && dbResponse.data.translation) {
-        console.log(
-          "Translation found in database:",
-          dbResponse.data.translation
-        );
         return dbResponse.data.translation;
       }
     } catch (dbError) {
@@ -236,19 +233,19 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: "white",
     padding: 80,
-    // paddingTop: 60,
-    // paddingBottom: 60,
-    // paddingLeft: 80,
-    // paddingRight: 80,
+    width: 270,
     backgroundColor: "#556BBE",
     borderRadius: 10,
     alignItems: "center",
   },
   modalText: {
-    fontSize: 18,
+    fontSize: 25,
     textAlign: "right", // Force RTL alignment
     writingDirection: "rtl", // Ensures correct text flow
     direction: "rtl", // Extra safety for rendering
     fontFamily: "Tajawal",
+    color: "white",
+    fontWeight: "bold",
+    letterSpacing: 2,
   },
 });

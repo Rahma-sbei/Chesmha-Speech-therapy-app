@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { Audio } from "expo-av";
 import axios from "axios";
 
 const Typing = () => {
@@ -32,6 +33,28 @@ const Typing = () => {
     }
   }, [debouncedText]);
 
+  const pronounceText = async (text) => {
+    try {
+      const dbResponse = await axios.post(
+        "http://192.168.1.15:7000/generate_speech/",
+        { text: text }
+      );
+      // Step 2: Set up the audio URL from FastAPI
+      const audioUrl = "http://192.168.1.15:7000/get_audio/";
+
+      // Step 3: Play the streamed WAV file using expo-av
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: audioUrl },
+        { shouldPlay: true }
+      );
+
+      // Step 4: Play the audio
+      await sound.playAsync();
+    } catch (dbError) {
+      console.error("Error pronouncing this text", dbError);
+    }
+  };
+
   const translateText = async (text) => {
     const dbtext = text.toLowerCase();
     try {
@@ -43,10 +66,6 @@ const Typing = () => {
       );
 
       if (dbResponse.data && dbResponse.data.translation) {
-        console.log(
-          "Translation found in database:",
-          dbResponse.data.translation
-        );
         return setTranslation(dbResponse.data.translation);
       }
     } catch (dbError) {
@@ -58,10 +77,6 @@ const Typing = () => {
         text: text,
       });
 
-      console.log(
-        "Translated Text from external API:",
-        response.data.translated_text
-      );
       return setTranslation(response.data.translated_text);
     } catch (apiError) {
       console.error("Error translating text using external API:", apiError);
@@ -106,9 +121,12 @@ const Typing = () => {
         <Text style={styles.translationText}>
           {translation || "Translation will appear here..."}
         </Text>
-        <View style={styles.iconRow}>
+        <Pressable
+          style={styles.iconRow}
+          onPress={() => pronounceText(translation)}
+        >
           <FontAwesome name="volume-up" size={16} color="gray" />
-        </View>
+        </Pressable>
       </View>
 
       <View style={styles.bottomBar}>
