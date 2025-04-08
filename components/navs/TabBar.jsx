@@ -4,9 +4,30 @@ import HomeScreen from "../screens/Home";
 import Typing from "../screens/Typing";
 import AudioPlaying from "../screens/Audio";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import PlantListScreen from "../screens/PlantListScreen";
+import AnimalListScreen from "../screens/AnimalListScreen";
+import FoodListScreen from "../screens/FoodListScreen";
+import PlantDetailScreen from "../screens/PlantDetailScreen";
+import AnimalDetailScreen from "../screens/AnimalDetailScreen";
+import FoodDetailScreen from "../screens/FoodDetailScreen";
+
 import Capture from "../screens/Capture";
 
 const Tab = createBottomTabNavigator();
+const HomeStack = createStackNavigator();
+
+const HomeStackScreen = () => (
+  <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+    <HomeStack.Screen name="HomeMain" component={HomeScreen} />
+    <HomeStack.Screen name="PlantList" component={PlantListScreen} />
+    <HomeStack.Screen name="PlantDetail" component={PlantDetailScreen} />
+    <HomeStack.Screen name="AnimalList" component={AnimalListScreen} />
+    <HomeStack.Screen name="AnimalDetail" component={AnimalDetailScreen} />
+    <HomeStack.Screen name="FoodList" component={FoodListScreen} />
+    <HomeStack.Screen name="FoodDetail" component={FoodDetailScreen} />
+  </HomeStack.Navigator>
+);
 
 export default function TabBar() {
   return (
@@ -47,7 +68,7 @@ export default function TabBar() {
           headerShown: false,
         }}
         name="Home"
-        component={HomeScreen}
+        component={HomeStackScreen}
       />
       <Tab.Screen
         options={{

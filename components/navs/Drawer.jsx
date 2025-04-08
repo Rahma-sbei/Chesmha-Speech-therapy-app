@@ -7,6 +7,7 @@ import {
 import TabBar from "./TabBar";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { View, Text, Pressable } from "react-native";
+import PlantListScreen from "../screens/PlantListScreen";
 
 export default function Drawer({ route }) {
   const Drawer = createDrawerNavigator();

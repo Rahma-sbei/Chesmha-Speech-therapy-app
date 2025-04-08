@@ -8,6 +8,7 @@ import {
   ImageBackground,
 } from "react-native";
 import GestureRecognizer from "react-native-swipe-gestures";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const onboardingData = [
   {

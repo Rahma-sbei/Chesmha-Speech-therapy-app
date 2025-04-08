@@ -28,7 +28,7 @@ export default function PasswordResetScreen() {
           <Text style={styles.backButtonText}>&lt; Back</Text>
         </TouchableOpacity>
         <Image
-          source={require("../assets/passeword.png")} 
+          source={require("../../assets/passeword.png")}
           style={styles.image}
         />
         <Text style={styles.title}>Reset your password</Text>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 16,
-    color: "#8359E3", 
+    color: "#8359E3",
   },
   title: {
     fontSize: 24,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   button: {
-    backgroundColor: "#8359E3", 
+    backgroundColor: "#8359E3",
     padding: 15,
     borderRadius: 5,
     marginTop: 20,

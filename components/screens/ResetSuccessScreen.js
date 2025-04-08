@@ -14,8 +14,8 @@ export default function ResetSuccessScreen() {
         <Text style={styles.backButtonText}>&lt; Back</Text>
       </TouchableOpacity>
       <Image
-        source={require("../assets/successful.png")}
-        style={styles.image} 
+        source={require("../../assets/successful.png")}
+        style={styles.image}
       />
       <Text style={styles.title}>Reset successful</Text>
       <Text style={styles.subtitle}>You can now log in to your account</Text>
@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
     color: "#8359E3",
   },
   image: {
-    width: 90, 
-    height: 90, 
+    width: 90,
+    height: 90,
     marginBottom: 20,
   },
   title: {

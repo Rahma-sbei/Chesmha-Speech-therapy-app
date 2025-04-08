@@ -22,7 +22,7 @@ const WelcomeScreen = ({ navigation }) => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          navigation.navigate("LoginPage");
+          navigation.navigate("Onboard");
         }}
       >
         <Text style={styles.buttonText}>Get Started</Text>

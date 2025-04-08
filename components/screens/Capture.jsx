@@ -11,13 +11,34 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { FontAwesome } from "@expo/vector-icons";
+import { Audio } from "expo-av";
 import axios from "axios";
 
 export default function Capture() {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [detectedText, setDetectedText] = useState("");
+  const [translation, setTranslation] = useState("");
+
+  const pronounceText = async (text) => {
+    try {
+      const dbResponse = await axios.post(
+        "http://192.168.1.15:7000/generate_speech/",
+        { text: text }
+      );
+      const audioUrl = "http://192.168.1.15:7000/get_audio/";
+
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: audioUrl },
+        { shouldPlay: true }
+      );
+
+      await sound.playAsync();
+    } catch (dbError) {
+      console.error("Error pronouncing this text", dbError);
+    }
+  };
 
   useEffect(() => {
     async () => {
@@ -37,7 +58,7 @@ export default function Capture() {
 
   const closeModal = () => {
     setModalVisible(false);
-    setDetectedText("");
+    setTranslation("");
   };
 
   const apiKey = "acc_45392865d149c17";
@@ -54,7 +75,7 @@ export default function Capture() {
       );
 
       if (dbResponse.data && dbResponse.data.translation) {
-        return dbResponse.data.translation;
+        return setTranslation(dbResponse.data.translation);
       }
     } catch (dbError) {
       console.error("Error fetching translation from database:", dbError);
@@ -72,7 +93,7 @@ export default function Capture() {
         "Translated Text from external API:",
         apiResponse.data.translated_text
       );
-      return apiResponse.data.translated_text;
+      return setTranslation(apiResponse.data.translated_text);
     } catch (apiError) {
       console.error("Error translating text using external API:", apiError);
       return null;
@@ -107,7 +128,7 @@ export default function Capture() {
 
       const res = response.data.result.tags[0]?.tag?.en;
       console.log("Imagga Response:", res);
-      setDetectedText(translateText(res));
+      translateText(res);
     } catch (error) {
       console.error(
         "Error uploading image:",
@@ -152,11 +173,22 @@ export default function Capture() {
         <TouchableWithoutFeedback onPress={closeModal}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              {detectedText ? (
-                <Text style={styles.modalText}>{detectedText}</Text>
+              {translation ? (
+                <Text style={styles.modalText}>{translation}</Text>
               ) : (
                 <Text style={styles.modalText}>Loading...</Text>
               )}
+              <Pressable
+                style={styles.iconRow}
+                onPress={() => pronounceText(translation)}
+              >
+                <FontAwesome
+                  name="volume-up"
+                  size={20}
+                  color="gray"
+                  style={{ marginTop: 30 }}
+                />
+              </Pressable>
             </View>
           </View>
         </TouchableWithoutFeedback>

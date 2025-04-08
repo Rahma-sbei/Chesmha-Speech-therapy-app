@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Keyboard, 
+  Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -45,7 +45,7 @@ export default function OTPVerificationScreen() {
         <Text style={styles.backButtonText}>&lt; Back</Text>
       </TouchableOpacity>
       <Text style={styles.title}>OTP Verification</Text>
-      <Image source={require("../assets/otp.png")} style={styles.image} />
+      <Image source={require("../../assets/otp.png")} style={styles.image} />
       <Text style={styles.subtitle}>Please enter OTP verification</Text>
 
       <View style={styles.otpContainer}>

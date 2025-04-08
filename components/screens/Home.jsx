@@ -5,8 +5,8 @@ import {
   TextInput,
   Image,
   FlatList,
-  TouchableOpacity,
   StyleSheet,
+  Pressable,
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { jwtDecode } from "jwt-decode";
@@ -18,40 +18,49 @@ const categories = [
     name: "Plants",
     icon: require("../../assets/plants-removebg-preview.png"),
     bgColor: "#E8F5E9",
+    next: "PlantList",
+    clicked: "rgb(137, 204, 143)",
   },
   {
     id: "2",
     name: "Animals",
     icon: require("../../assets/animal-removebg-preview.png"),
     bgColor: "#FFF3E0",
+    next: "AnimalList",
+    clicked: "rgb(230, 193, 133)",
   },
   {
     id: "3",
     name: "Nature",
     icon: require("../../assets/nature-removebg-preview.png"),
     bgColor: "#E0F7FA",
+    clicked: "rgb(143, 233, 245)",
   },
   {
     id: "4",
     name: "Food",
     icon: require("../../assets/food-removebg-preview.png"),
     bgColor: "#FCE4EC",
+    next: "FoodList",
+    clicked: "rgb(240, 166, 190)",
   },
   {
     id: "5",
     name: "Objects",
     icon: require("../../assets/objects-removebg-preview.png"),
     bgColor: "#FFFDE7",
+    clicked: "rgb(238, 231, 155)",
   },
   {
     id: "6",
     name: "More",
     icon: require("../../assets/download-removebg-preview.png"),
     bgColor: "#E8EAF6",
+    clicked: "rgb(166, 176, 233)",
   },
 ];
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [user, setUser] = useState({});
   const [userId, setuserId] = useState({});
   const url = "http://192.168.1.16:4000/api/users";
@@ -115,14 +124,22 @@ const HomeScreen = () => {
         columnWrapperStyle={{ justifyContent: "space-between", gap: 10 }}
         ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            style={{
-              backgroundColor: item.bgColor,
-              width: 100,
-              height: 120,
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 25,
+          <Pressable
+            style={({ pressed }) => [
+              {
+                backgroundColor: item.bgColor,
+                width: 100,
+                height: 120,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 25,
+              },
+              pressed && { backgroundColor: item.clicked },
+            ]}
+            onPress={() => {
+              if (item.next) {
+                navigation.navigate(item.next);
+              }
             }}
           >
             <Image
@@ -132,7 +149,7 @@ const HomeScreen = () => {
             />
 
             <Text style={{ fontSize: 15, fontWeight: 500 }}>{item.name}</Text>
-          </TouchableOpacity>
+          </Pressable>
         )}
       />
     </View>

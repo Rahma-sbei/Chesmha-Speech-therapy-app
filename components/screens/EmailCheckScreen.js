@@ -1,25 +1,29 @@
 import React, { useState, useRef } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function EmailCheckScreen() {
   const navigation = useNavigation();
-  const [otp, setOtp] = useState(["", "", "", ""]); 
+  const [otp, setOtp] = useState(["", "", "", ""]);
   const inputRefs = useRef([]);
 
-  
   const handleOTPChange = (index, value) => {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
 
-    
     if (value && index < otp.length - 1) {
       inputRefs.current[index + 1].focus();
     }
   };
 
- 
   const handleBackspace = (index) => {
     if (!otp[index] && index > 0) {
       inputRefs.current[index - 1].focus();
@@ -28,13 +32,13 @@ export default function EmailCheckScreen() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      >
         <Text style={styles.backButtonText}>&lt; Back</Text>
       </TouchableOpacity>
-      <Image
-        source={require("../assets/email.png")} 
-        style={styles.image}
-      />
+      <Image source={require("../../assets/email.png")} style={styles.image} />
       <Text style={styles.title}>Check your mail</Text>
       <Text style={styles.subtitle}>
         We just sent an OTP to your registered email address
@@ -50,11 +54,11 @@ export default function EmailCheckScreen() {
             onChangeText={(value) => handleOTPChange(index, value)}
             value={digit}
             onKeyPress={({ nativeEvent }) => {
-              if (nativeEvent.key === 'Backspace') {
+              if (nativeEvent.key === "Backspace") {
                 handleBackspace(index);
               }
             }}
-            ref={(ref) => (inputRefs.current[index] = ref)} 
+            ref={(ref) => (inputRefs.current[index] = ref)}
           />
         ))}
       </View>
@@ -76,17 +80,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#F8F8FF", 
+    backgroundColor: "#F8F8FF",
     paddingTop: 60,
   },
   backButton: {
-    position: 'absolute',
+    position: "absolute",
     top: 20,
     left: 10,
   },
   backButtonText: {
     fontSize: 16,
-    color: '#8359E3', 
+    color: "#8359E3",
   },
   image: {
     width: 120,
@@ -97,7 +101,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#8359E3", 
+    color: "#8359E3",
     marginBottom: 10,
   },
   subtitle: {
@@ -120,7 +124,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     textAlign: "center",
     fontSize: 20,
-    backgroundColor: "#E0E0E0", 
+    backgroundColor: "#E0E0E0",
   },
   resendText: {
     fontSize: 14,
@@ -128,11 +132,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   resendLink: {
-    color: "#8359E3", 
+    color: "#8359E3",
     fontWeight: "bold",
   },
   button: {
-    backgroundColor: "#8359E3", 
+    backgroundColor: "#8359E3",
     padding: 15,
     borderRadius: 5,
     marginTop: 20,

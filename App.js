@@ -29,20 +29,18 @@ const App = () => {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="WelcomePage" component={WelcomePage} />
-        <Stack.Screen name="LoginPage" component={LoginPage} />
-        <Stack.Screen name="SignUp" component={SignUp} />
+        {/* <Stack.Screen name="LoginPage" component={LoginPage} />
+        <Stack.Screen name="SignUp" component={SignUp} /> */}
         <Stack.Screen name="Onboard" component={OnboardingScreen} />
-        <Stack.Screen name="TabBar" component={TabBar} />
-        <Stack.Screen name="PlantList" component={PlantListScreen} />
-        <Stack.Screen name="PlantDetail" component={PlantDetailScreen} />
-        <Stack.Screen name="AnimalList" component={AnimalListScreen} />
-        <Stack.Screen name="AnimalDetail" component={AnimalDetailScreen} />
+
         <Stack.Screen name="EmailCheck" component={EmailCheckScreen} />
-        <Stack.Screen name="OTPVerification" component={OTPVerificationScreen} />
+        <Stack.Screen
+          name="OTPVerification"
+          component={OTPVerificationScreen}
+        />
         <Stack.Screen name="PasswordReset" component={PasswordResetScreen} />
         <Stack.Screen name="ResetSuccess" component={ResetSuccessScreen} />
-        <Stack.Screen name="FoodList" component={FoodListScreen} />
-        <Stack.Screen name="FoodDetail" component={FoodDetailScreen} />
+
         <Stack.Screen name="Drawer" component={Drawer}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
