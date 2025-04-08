@@ -125,7 +125,12 @@ const Typing = () => {
           style={styles.iconRow}
           onPress={() => pronounceText(translation)}
         >
-          <FontAwesome name="volume-up" size={16} color="gray" />
+          <FontAwesome
+            name="volume-up"
+            size={20}
+            color="gray"
+            style={{ marginTop: 30 }}
+          />
         </Pressable>
       </View>
 
@@ -149,7 +154,7 @@ const Typing = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "white", padding: 20, marginTop: 30 },
+  container: { flex: 1, backgroundColor: "white", padding: 20 },
 
   header: {
     flexDirection: "row",

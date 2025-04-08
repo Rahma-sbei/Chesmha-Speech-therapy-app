@@ -1,21 +1,21 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-
+import "react-native-reanimated";
 import WelcomePage from "./components/screens/WelcomePage";
 import LoginPage from "./components/screens/LogInPage";
 import SignUp from "./components/screens/SignUp";
 import OnboardingScreen from "./components/screens/Onboarding";
-import TabBar from "./components/navs/TabBar";
-import Capture from "./components/screens/Capture";
-import Typing from "./components/screens/Typing";
+import Drawer from "./components/navs/Drawer";
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <TabBar />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Drawer" component={Drawer}></Stack.Screen>
+      </Stack.Navigator>
     </NavigationContainer>
 
     // <NavigationContainer>

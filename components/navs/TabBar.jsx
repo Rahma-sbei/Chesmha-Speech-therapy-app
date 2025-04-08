@@ -2,7 +2,7 @@ import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import HomeScreen from "../screens/Home";
 import Typing from "../screens/Typing";
-import Audio from "../screens/Audio";
+import AudioPlaying from "../screens/Audio";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Capture from "../screens/Capture";
 
@@ -37,7 +37,7 @@ export default function TabBar() {
           borderTopRightRadius: 10,
         },
         tabBarLabelStyle: {
-          fontSize: 13, // Set your desired font size
+          fontSize: 14,
         },
         tabBarHideOnKeyboard: true,
       })}
@@ -61,7 +61,7 @@ export default function TabBar() {
           headerShown: false,
         }}
         name="Audio"
-        component={Audio}
+        component={AudioPlaying}
       />
       <Tab.Screen
         options={{
