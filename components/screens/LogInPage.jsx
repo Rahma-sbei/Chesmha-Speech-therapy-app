@@ -10,9 +10,10 @@ import {
   Pressable,
 } from "react-native";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginPage = ({ navigation }) => {
-  const url = "http://192.168.48.225:4000/api/signIn";
+  const url = "http://192.168.1.16:4000/api/signIn";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,11 +39,11 @@ const LoginPage = ({ navigation }) => {
         .post(url, user)
         .then((response) => {
           const token = response.data.token;
+          AsyncStorage.setItem("token", token);
           navigation.navigate("Onboard");
-          // localStorage.setItem("token", token);
         })
         .catch((error) => {
-          console.error("There was an error!", error);
+          console.log("There was an error!", error);
           setError(true);
         });
     }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,7 +9,9 @@ import {
   StyleSheet,
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { jwtDecode } from "jwt-decode";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 const categories = [
   {
     id: "1",
@@ -50,32 +52,59 @@ const categories = [
 ];
 
 const HomeScreen = () => {
+  const [user, setUser] = useState({});
+  const [userId, setuserId] = useState({});
+  const url = "http://192.168.1.16:4000/api/users";
+
+  useEffect(() => {
+    AsyncStorage.getItem("token")
+      .then((token) => {
+        if (token) {
+          try {
+            const decodedToken = jwtDecode(token);
+            setuserId(decodedToken.id);
+            return token;
+          } catch (error) {
+            console.error("Token decoding error:", error);
+          }
+        }
+        return null;
+      })
+      .then((token) => {
+        if (userId && token) {
+          const headers = {
+            Authorization: `Bearer ${token}`,
+          };
+
+          axios
+            .get(`${url}/${userId}`, { headers })
+            .then((res) => {
+              setUser(res.data.user);
+              console.log("This is the username:", user.userName);
+            })
+            .catch((error) => {
+              console.error(error.response?.data?.msg);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error("Error retrieving token:", error);
+      });
+  }, [userId]);
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.greeting}>Hello!</Text>
-          <Text style={styles.username}>Serena Harrison</Text>
-        </View>
-        <TouchableOpacity>
-          <FontAwesome name="bell" size={24} color="black" />
-          <View style={styles.notificationDot} />
-        </TouchableOpacity>
-      </View>
-
-      {/* Search Bar */}
       <TextInput
         style={styles.searchBar}
         placeholder="Search"
         placeholderTextColor="#aaa"
       />
 
-      {/* Premium Banner */}
       <View style={styles.premiumBanner}>
-        <Text style={styles.premiumText}>Go Premium</Text>
-        <Text style={styles.premiumSubText}>
-          Upgrade to premium, get more profit now!
-        </Text>
+        <View>
+          <Text style={styles.greeting}>Hello!</Text>
+          <Text style={styles.username}>{user.userName}</Text>
+        </View>
       </View>
 
       {/* Categories */}
@@ -83,8 +112,8 @@ const HomeScreen = () => {
       <FlatList
         data={categories}
         numColumns={3}
-        columnWrapperStyle={{ justifyContent: "space-between", gap: 10 }} // Space between columns
-        ItemSeparatorComponent={() => <View style={{ height: 20 }} />} // Vertical spacing
+        columnWrapperStyle={{ justifyContent: "space-between", gap: 10 }}
+        ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={{
@@ -111,15 +140,15 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "white", padding: 20, marginTop: 35 },
+  container: { flex: 1, backgroundColor: "white", padding: 20 },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 20,
   },
-  greeting: { fontSize: 18, fontWeight: "bold" },
-  username: { fontSize: 16, color: "gray" },
+  greeting: { fontSize: 18, fontWeight: "bold", color: "white" },
+  username: { fontSize: 16, color: "rgb(189, 179, 211)" },
   notificationDot: {
     width: 8,
     height: 8,

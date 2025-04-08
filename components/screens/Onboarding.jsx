@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -33,12 +33,51 @@ const onboardingData = [
 
 const OnboardingScreen = ({ navigation }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [user, setUser] = useState({});
+  const [userId, setuserId] = useState({});
+  const url = "http://192.168.1.15:4000/api/users";
+
+  useEffect(() => {
+    AsyncStorage.getItem("token")
+      .then((token) => {
+        if (token) {
+          try {
+            const decodedToken = jwtDecode(token);
+            setuserId(decodedToken.id);
+            return token;
+          } catch (error) {
+            console.error("Token decoding error:", error);
+          }
+        }
+        return null;
+      })
+      .then((token) => {
+        if (userId && token) {
+          const headers = {
+            Authorization: `Bearer ${token}`,
+          };
+
+          axios
+            .get(`${url}/${userId}`, { headers })
+            .then((res) => {
+              setUser(res.data.user);
+              console.log("This is the username:", user.userName);
+            })
+            .catch((error) => {
+              console.error(error.response?.data?.msg);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error("Error retrieving token:", error);
+      });
+  }, [userId]);
 
   const handleNext = () => {
     if (currentIndex < onboardingData.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      navigation.navigate("TabBar");
+      navigation.navigate("Drawer", { userName: user.userName });
     }
   };
 
