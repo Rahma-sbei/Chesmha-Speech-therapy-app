@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+pydantic
+ctranslate2
+transformers
+sentencepiece
+python-dotenv
