@@ -29,8 +29,8 @@ const App = () => {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="WelcomePage" component={WelcomePage} />
-        {/* <Stack.Screen name="LoginPage" component={LoginPage} />
-        <Stack.Screen name="SignUp" component={SignUp} /> */}
+        <Stack.Screen name="LoginPage" component={LoginPage} />
+        <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Onboard" component={OnboardingScreen} />
 
         <Stack.Screen name="EmailCheck" component={EmailCheckScreen} />
@@ -44,19 +44,6 @@ const App = () => {
         <Stack.Screen name="Drawer" component={Drawer}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
-
-    // <NavigationContainer>
-    //   <Stack.Navigator
-    //     initialRouteName="WelcomePage"
-    //     screenOptions={{ headerShown: false }}
-    //   >
-    //     <Stack.Screen name="WelcomePage" component={WelcomePage} />
-    //     <Stack.Screen name="LoginPage" component={LoginPage} />
-    //     <Stack.Screen name="SignUp" component={SignUp} />
-    //     <Stack.Screen name="Onboard" component={OnboardingScreen} />
-    //     <Stack.Screen name="TabBar" component={TabBar} />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
   );
 };
 
